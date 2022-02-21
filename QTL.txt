@@ -1,0 +1,14 @@
+A Technically-Not-One-Instruction-But-It-Kinda-Is-So-Yeah Super RISC Processor
+
+Input Select: A, [A], A+B, A-B, B, PC, I/O, RAM (& do PC++).
+Output Select: A, [A], B, I/O, PC, PC if 0, PC if -, PC if C.
+
+Fetch then Execute.
+
+0 [3-bit Output] [1-bit Set ALU Flags] [3-bit Input]
+
+Enable must be kept on for CPU to run.
+
+If you disable the CPU while it's running, the I/O might behave a bit funky depending on what clock signal you're sending it.
+As long as the clock you're giving the I/O is masked by the Enable wire, you ~should~ be fine.
+

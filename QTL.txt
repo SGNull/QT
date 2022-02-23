@@ -1,14 +1,23 @@
 A Technically-Not-One-Instruction-But-It-Kinda-Is-So-Yeah Super RISC Processor
 
-Input Select: A, [A], A+B, A-B, B, PC, I/O, RAM (& do PC++).
-Output Select: A, [A], B, I/O, PC, PC if 0, PC if -, PC if C.
 
-Fetch then Execute.
+                0    1     2     3    4    5           6           7
+Input Select:   A,  [A],  A+B,  A-B,  B,   PC,       I/O,      RAM (& do PC++).
+Output Select:  A,  [A],  B,    I/O,  PC,  PC if 0,  PC if -,  PC if I/O Read.
 
-0 [3-bit Output] [1-bit Set ALU Flags] [3-bit Input]
+
+2 flags can be stored: out == 0, and out < 0
+I/O Reading is directly read at the time of checking, and not stored.
+
+
+1 cycle Fetch, then 1 cycle Execute.
+Each Fetch cycle the PC is incremented.
+[1-bit Halt] [3-bit Output] [1-bit Set ALU Flags] [3-bit Input]
+
 
 Enable must be kept on for CPU to run.
 
 If you disable the CPU while it's running, the I/O might behave a bit funky depending on what clock signal you're sending it.
 As long as the clock you're giving the I/O is masked by the Enable wire, you ~should~ be fine.
 
+The CPU's Halt bit must be handled externally (ie. there exists no internal circuitry to handle halting).

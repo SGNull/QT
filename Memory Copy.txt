@@ -3,4 +3,5 @@ MemCopy(Src, Dest, Ret):
 	[A]>B
 	Dest>A
 	B>[A]
-	Ret>PC
+	Ret>A
+	[A]>PC

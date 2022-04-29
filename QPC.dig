@@ -18,6 +18,10 @@ Note: The computer contains program memory!</string>
       <string>Width</string>
       <int>9</int>
     </entry>
+    <entry>
+      <string>preloadProgramFile</string>
+      <file>C:\Users\Devin\Desktop\QT\Test.hex</file>
+    </entry>
   </attributes>
   <visualElements>
     <visualElement>

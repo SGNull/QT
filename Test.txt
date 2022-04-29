@@ -1,0 +1,34 @@
+#15+Input > Output
+
+
+#We have to go through the protocol first to get the input
+
+:Loop:
+IO>A
+RAM>PCifZ
+$Loop
+
+IO>A
+RAM>B
+0xF
+A+B>A
+
+A>IO
+HLT
+
+RAM>PC
+
+
+
+Machine Code:
+68
+75
+0
+
+60
+71
+0F
+20
+
+02
+80

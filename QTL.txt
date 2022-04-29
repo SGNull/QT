@@ -3,7 +3,7 @@ A Technically-Not-One-Instruction-But-It-Kinda-Is-So-Yeah Super RISC Processor
 
                 0    1     2     3    4    5           6           7
 Input Select:   A,  [A],  A+B,  A-B,  B,   PC,       I/O,      RAM (& do PC++).
-Output Select:  A,  [A],  B,    I/O,  PC,  PC if 0,  PC if -,  PC if I/O Read.
+Output Select:  A,   B,   I/O,  [A]   PC,  PC if 0,  PC if -,  PC if I/O Read.
 
 
 2 flags can be stored: out == 0, and out < 0

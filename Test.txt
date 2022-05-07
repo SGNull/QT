@@ -4,7 +4,7 @@
 #We have to go through the protocol first to get the input
 
 :Loop:
-IO>A
+IO>A + flags
 RAM>PCifZ
 $Loop
 

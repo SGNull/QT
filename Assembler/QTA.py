@@ -47,6 +47,7 @@ special_lines_dict = {
 }
 
 
+# Types of lines for get_line_type
 class LineType(Enum):
     VAL = 0
     OP = 1
@@ -55,6 +56,7 @@ class LineType(Enum):
     LABEL = 4
     CONST = 5
     UNKNOWN = -1
+    EMPTY = -2
 
 
 # Assembly Patterns
@@ -67,20 +69,10 @@ LABEL_CHAR = ':'
 REFERENCE_CHAR = '$'
 HALT_LINE = "halt"
 SET_FLAG_SUFFIX = "+f"
+CONST_CHAR = '='
 
 IN_OP_SHIFT = 4
 SET_FLAGS_MASK = 0b1000
-
-
-# For get_line_info
-MACHINE_CODE = 1
-WORD_COUNT = 0
-
-BAD_LINE_WORD = -1
-MULTI_MC = -3
-UNKNOWN_MC = -2
-EMPTY_MC = -1
-
 
 # Error messages
 ERROR_SEPERATOR = "\n"
@@ -100,133 +92,194 @@ UNKNOWN_LABEL_MSG = "Label not found in table."
 
 
 def init():
+    """The main function of the program."""
+
+    # Get args
     args = sys.argv
     if len(args) != EXPECTED_ARG_COUNT:
-        specific_msg = "Expected args: " + str(EXPECTED_ARG_COUNT)
-        error(BAD_ARG_COUNT_MSG, specific_msg, INIT_ERROR)
+        error("Expected " + str(EXPECTED_ARG_COUNT) + " args but got " + str(len(args)))
 
+    # Check if input file is OK
     input_file_path = args[INPUT_FILE_ARG]
-    # Genius solution by https://www.geeksforgeeks.org/python-check-if-string-ends-with-any-string-in-given-list/
-    # Does maybe_file_path.endswith() using all elements of FILE_INPUT_EXTENSIONS
-    # If it doesn't find anything, the list will (somehow) be/return false.
     extension = list(filter(input_file_path.endswith, FILE_INPUT_EXTENSIONS))
     if not extension:
-        specific_msg = "Supported extensions: " + str(FILE_INPUT_EXTENSIONS)
-        error(BAD_FILE_INPUT_MSG, specific_msg, INIT_ERROR)
-
+        error("Bad input extension. Supported extensions: " + str(FILE_INPUT_EXTENSIONS))
+    extension = extension[0]  # Redefine extension as the only file extension left (only one will match)
     if not exists(input_file_path):
-        specific_msg = "File not found."
-        error(BAD_FILE_INPUT_MSG, specific_msg, INIT_ERROR)
+        error("Input file not found.")
 
+    # Do the assembling
     with open(input_file_path, 'r') as input_file:
+        # Get the input lines
         lines = input_file.readlines()
+        cleaned_lines = clean_lines(lines)
 
-        label_table = build_table(lines)
-        machine_code = assemble(lines, label_table)
+        # Do the two passes and make the output lines
+        label_table = build_table(cleaned_lines)
+        machine_code = assemble(cleaned_lines, label_table)
         output_lines = hex_file_format(machine_code)
 
-        file_name = input_file_path[:-len(extension[0])]  # Remove the (only) file extension from the end
+        # Write the output lines to the output file
+        file_name = input_file_path[:-len(extension)]  # Remove the (only) file extension from the end
         output_file_path = file_name + FILE_OUTPUT_EXTENSION
         with open(output_file_path, 'w') as output_file:
             output_file.writelines(output_lines)
 
 
 def build_table(input_lines):
-    """Builds and returns the label table for the given lines."""
-    table = {}
+    """Returns the label table for the given lines."""
 
+    # Create the table and set the current address to 0
+    table = {}
+    address = 0
+
+    # Loop through all the lines
     for line in input_lines:
-        get_line_info(line)
+        # Get the line's type
+        line_type = get_line_type(line)
+
+        # If it's a label, add it to the table
+        if line_type == LineType.LABEL:
+            label = line[1:]
+            table[label] = address
+
+        # If it's a constant, try to add its definition to the table
+        elif line_type == LineType.CONST:
+            parts = line.split('=')
+            if len(parts) != 2:
+                error("Bad constant definition in line: " + line)
+
+            label = parts[0].strip()
+            value = get_value_if_value(parts[1].strip())
+            if value:
+                table[label] = value
+            else:
+                error("Bad value in line: " + line)
+
+        else:
+            # Note: we are assuming here that any other line is 1 word. This might change!
+            address += 1
 
     return table
 
 
 def assemble(input_lines, table):
-    """Returns the machine code for the given input lines, using the given label table"""
+    """Returns the machine code for the given input lines, using the given label table."""
+
     output = []
 
+    # code here pls :)
 
-def get_line_type(line):
-    """Returns the type of the line"""
-    real_line = line.split(COMMENT_CHAR)[0].strip()  # Remove comments & whitespace
-    if len(real_line) != 0:
-        if OP_CHAR in real_line:
-            # Is an operation
-            args = real_line.split(OP_CHAR)
-            if len(args) != 2:
-                specific_msg = "Bad operation in line: " + line
-                error(BAD_OP_COUNT_MSG, specific_msg, ASSEMBLE_ERROR)
-
-            if args[0] not in inputs_dict:
-                specific_msg = "Bad input operand: " + line
-                error(BAD_INPUT_OP_MSG, specific_msg, ASSEMBLE_ERROR)
-
-            if args[1] not in outputs_dict:
-                specific_msg = "Bad output operand: " + line
-                error(BAD_OUTPUT_OP_MSG, specific_msg, ASSEMBLE_ERROR)
-
-            input_num = inputs_dict[args[0]]
-            output_num = outputs_dict[args[1]]
-
-            machine_code = input_num << IN_OP_SHIFT | output_num
-            if args[1].endswith(SET_FLAG_SUFFIX):
-                machine_code = machine_code | SET_FLAGS_MASK
-
-            out = (1, machine_code)
-
-        elif real_line[0] == real_line[-1] == CHARACTER_CHAR and len(real_line) == 3:
-            # Is character
-            out = (1, ord(real_line[1]))
-
-        elif real_line.startswith(HEX_SUFFIX):
-            # Is hex number
-            out = (1, int(real_line, 16))
-
-        elif real_line.startswith(BINARY_SUFFIX):
-            # Is binary number
-            out = (1, int(real_line, 2))
-
-        elif real_line.isnumeric():
-            # Is decimal number
-            out = (1, int(real_line))
-
-        elif real_line[0] == REFERENCE_CHAR:
-            # Is a reference
-            out = (1, UNKNOWN_MC)
-
-        elif real_line[0] == real_line[-1] == LABEL_CHAR:
-            # Is a label, do nothing
-            out = (0, EMPTY_MC)
-
-        elif real_line in special_lines_dict:
-            # Is a special line
-            out = (1, special_lines_dict[real_line])
-
-        else:
-            # Unknown line of code
-            out = (BAD_LINE_WORD,EMPTY_MC)
-    return out
+    return output
 
 
 def hex_file_format(input_data):
-    """Returns the .hex drive formatted version of the given data"""
+    """Returns the .hex drive formatted version of the given data."""
+
     lines = []
+
     # code here pls :)
 
     return lines
 
 
+def clean_lines(input_lines):
+    """Returns a cleaner set of lines to work with."""
+
+    return list(
+        filter(bool,
+               map(line_cleaner, input_lines)))
+
+
+def line_cleaner(input_line):
+    """Returns a clean version of the input line, or returns false if cleaned line is empty."""
+
+    out_line = input_line.split(COMMENT_CHAR)[0].strip()
+    if len(out_line) == 0:
+        return False
+    else:
+        return out_line
+
+
+def get_line_type(line):
+    """Returns the type of the line"""
+
+    if len(line) == 0:
+        return LineType.EMPTY
+    elif OP_CHAR in line:
+        return LineType.OP
+    elif get_value_if_value(line):
+        return LineType.VAL
+    elif line[0] == REFERENCE_CHAR:
+        return LineType.REF
+    elif line[0] == line[-1] == LABEL_CHAR:
+        return LineType.LABEL
+    elif line in special_lines_dict:
+        return LineType.SPECIAL
+    elif CONST_CHAR in line:
+        return LineType.CONST
+    else:
+        return LineType.UNKNOWN
+
+
+def get_value_if_value(value_lexeme):
+    """Returns False if not a value lexeme, else returns its value"""
+
+    if value_lexeme[0] == value_lexeme[-1] == CHARACTER_CHAR and len(value_lexeme) == 3:
+        return ord(value_lexeme[1])
+    elif value_lexeme.startswith(HEX_SUFFIX):
+        return int(value_lexeme, 16)
+    elif value_lexeme.startswith(BINARY_SUFFIX):
+        return int(value_lexeme, 2)
+    elif value_lexeme.isnumeric():
+        return int(value_lexeme)
+    else:
+        return False
+
+
+def translate_instruction(instruction_line):
+    """Returns the machine code for the given instruction line."""
+
+    raw_args = instruction_line.split(OP_CHAR)
+
+    if len(raw_args) != 2:
+        error("Bad operation in line: " + instruction_line)
+
+    args = []
+    args[0] = raw_args[0].strip().lower()
+    args[1] = raw_args[1].strip().lower()
+
+    if args[0] not in inputs_dict:
+        error("Bad input operand: " + instruction_line)
+
+    if args[1] not in outputs_dict:
+        error("Bad output operand: " + instruction_line)
+
+    input_num = inputs_dict[args[0]]
+    output_num = outputs_dict[args[1]]
+
+    machine_code = input_num << IN_OP_SHIFT | output_num
+    if args[1].endswith(SET_FLAG_SUFFIX):
+        machine_code = machine_code | SET_FLAGS_MASK
+
+    return machine_code
+
+
 def label_lookup(reference, table):
+    """Returns the value of the given reference."""
+
     label = reference[1:]
     if label in table:
         return table[label]
     else:
-        error(UNKNOWN_LABEL_MSG, reference, OTHER_ERROR)
+        error("Label for reference not found: " + reference)
 
 
-def error(generic_message, specific_message, exit_code):
-    print(generic_message + ERROR_SEPERATOR + specific_message)
-    exit(exit_code)
+def error(msg):
+    """Prints the message and stops the program."""
+
+    print(msg)
+    exit(0)
 
 
 init()

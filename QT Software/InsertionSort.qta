@@ -1,0 +1,28 @@
+# Jump over the data segment
+MEM > PC
+$Main
+
+
+# ------- Data Segment -------
+:Temp:
+0
+:Current Address:
+$MyList
+
+:MyList:
+23
+42
+12
+16
+27
+31
+8
+:MyList.End:
+
+
+# ------- Code Segment -------
+:Main:
+	
+	
+
+hlt

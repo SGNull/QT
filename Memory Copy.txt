@@ -1,7 +1,0 @@
-MemCopy(Src, Dest, Ret):
-	Src>A
-	[A]>B
-	Dest>A
-	B>[A]
-	Ret>A
-	[A]>PC

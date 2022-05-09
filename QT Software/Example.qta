@@ -1,0 +1,34 @@
+# Comment
+myConst = 23
+myCharConst = 'a'
+
+# Jump
+MEM > PC
+$Loop
+
+:MyEmptyArray:
+0*12		   # Arrays cannot use constants
+
+:MyList:
+0x23
+0b00101100
+245
+'k'
+
+:MyString:
+'H'
+'i'
+
+:Loop:
+	# If input is zero, jump to Done
+	in > a +cmp
+	mem > PCifZ
+	$Done
+	
+	# Else, loop
+	mem > PC
+	$Loop
+
+:Done:
+
+hlt

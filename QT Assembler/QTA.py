@@ -8,9 +8,9 @@
 
 
 import sys  # For taking user input from command line
-from os.path import exists
-from enum import Enum
-from random import choice
+from os.path import exists  # For checking if the input exists
+from enum import Enum  # For line types
+from random import choice  # For printing random output
 
 
 # Input/output constants
@@ -18,7 +18,7 @@ EXPECTED_ARG_COUNT = 2
 INPUT_FILE_ARG     = 1
 FILE_INPUT_EXTENSIONS  = [".qta"]
 FILE_OUTPUT_EXTENSION = ".hex"
-HEX_FILE_HEADER = "v2.0 raw"
+HEX_FILE_HEADER = "v2.0 raw\n"
 
 # Assembly dictionaries
 inputs_dict = {
@@ -63,6 +63,7 @@ CONST_CHAR = '='
 EMPTY_ARRAY_PREFIX = "0*"
 INPUT_OP_SHIFT = 4
 SET_FLAGS_MASK = 0b1000
+HEX_PREFIX_SIZE = 2
 
 # Strings to print while running
 CLEANING_QUIPS = ["Cleaning the input...", "Reticulating splines...", "Input being sanitized...",
@@ -90,7 +91,7 @@ class LineType(Enum):
     EMPTY = -2
 
 
-def init():
+def main():
     """The main function of the program."""
 
     # Get args
@@ -193,6 +194,7 @@ def assemble(input_lines, table):
     for line in input_lines:
         # Check what the line type is
         line_type = get_line_type(line)
+
         match line_type:
             case LineType.VAL:
                 # If it's a value line, get and append its value
@@ -208,7 +210,7 @@ def assemble(input_lines, table):
 
             case LineType.SPECIAL:
                 # If it's special, append what the line translates to
-                output.append(special_lines_dict[line])
+                output.append(special_lines_dict[line.tolower()])
 
             case LineType.REF:
                 # If it's a reference, get and append the label's value from the table
@@ -235,7 +237,9 @@ def assemble(input_lines, table):
 
 def hex_file_format(input_data):
     """Returns the .hex drive formatted version of the given data."""
-    return [HEX_FILE_HEADER + '\n'] + [(hex(line)[2:] + '\n') for line in input_data]
+    return [HEX_FILE_HEADER] + \
+           [(hex(line)[HEX_PREFIX_SIZE:] + '\n')
+            for line in input_data]
 
 
 def clean_lines(input_lines):
@@ -330,4 +334,4 @@ def error(msg):
     exit(0)
 
 
-init()
+main()

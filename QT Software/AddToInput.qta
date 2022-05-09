@@ -1,0 +1,19 @@
+# The value to add to the input
+addValue = 5
+
+:Main:
+	# Wait for the input (input will be 0 if not ready)
+	in > a +cmp
+	mem > PCifZ
+	$Main
+	
+	# Get the input
+	in > a
+	
+	# Add addValue to A
+	mem > b
+	$addValue
+	a+b > a
+	
+	# Write to output
+	a > out

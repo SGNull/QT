@@ -31,7 +31,8 @@ inputs_dict = {
     "in": 6,
     "io": 6,
     "ram": 7,
-    "mem": 7
+    "mem": 7,
+    "next": 7,
 }
 outputs_dict = {
     "a": 0,
@@ -60,7 +61,8 @@ LABEL_CHAR = ':'
 REFERENCE_CHAR = '$'
 SET_FLAG_SUFFIX = "+cmp"
 CONST_CHAR = '='
-EMPTY_ARRAY_PREFIX = "0*"
+EMPTY_SPACE_PREFIX = "0*"
+
 INPUT_OP_SHIFT = 4
 SET_FLAGS_MASK = 0b1000
 HEX_PREFIX_SIZE = 2
@@ -86,7 +88,7 @@ class LineType(Enum):
     REF = 3
     LABEL = 4
     CONST = 5
-    ARRAY = 6
+    SPACE = 6
     UNKNOWN = -1
     EMPTY = -2
 
@@ -164,8 +166,8 @@ def build_table(input_lines):
                 else:
                     error("Bad value in line: " + line)
 
-            case LineType.ARRAY:
-                # If it's an empty array declaration, add its size to the address
+            case LineType.SPACE:
+                # If it's an empty space indicator, add its size to the address
                 val = line[2:]
                 value = get_value_if_value(val)
                 if not value:
@@ -219,8 +221,8 @@ def assemble(input_lines, table):
                     error("Reference label not found in line: " + line)
                 output.append(table[label])
 
-            case LineType.ARRAY:
-                # If it's an array, make the empty array by adding 0's to the output
+            case LineType.SPACE:
+                # If it's empty space, make space by adding 0's to the output
                 val = line[2:]
                 value = get_value_if_value(val)
                 if not value:
@@ -275,8 +277,8 @@ def get_line_type(line):
         return LineType.SPECIAL
     elif CONST_CHAR in line:
         return LineType.CONST
-    elif line.startswith(EMPTY_ARRAY_PREFIX):
-        return LineType.ARRAY
+    elif line.startswith(EMPTY_SPACE_PREFIX):
+        return LineType.SPACE
 
     else:
         return LineType.UNKNOWN

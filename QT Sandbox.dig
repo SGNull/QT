@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <circuit>
-  <version>1</version>
+  <version>2</version>
   <attributes>
     <entry>
       <string>preloadProgram</string>
@@ -12,11 +12,6 @@
     </entry>
   </attributes>
   <visualElements>
-    <visualElement>
-      <elementName>QPC.dig</elementName>
-      <elementAttributes/>
-      <pos x="760" y="320"/>
-    </visualElement>
     <visualElement>
       <elementName>Button</elementName>
       <elementAttributes>
@@ -31,12 +26,12 @@
       <elementName>Clock</elementName>
       <elementAttributes>
         <entry>
-          <string>Frequency</string>
-          <int>8</int>
-        </entry>
-        <entry>
           <string>runRealTime</string>
           <boolean>true</boolean>
+        </entry>
+        <entry>
+          <string>Frequency</string>
+          <int>8</int>
         </entry>
       </elementAttributes>
       <pos x="540" y="160"/>
@@ -137,6 +132,11 @@
       <elementName>Const</elementName>
       <elementAttributes/>
       <pos x="740" y="400"/>
+    </visualElement>
+    <visualElement>
+      <elementName>QTC.dig</elementName>
+      <elementAttributes/>
+      <pos x="760" y="320"/>
     </visualElement>
   </visualElements>
   <wires>

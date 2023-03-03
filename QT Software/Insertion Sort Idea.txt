@@ -1,0 +1,29 @@
+array_length = X
+
+
+top_index = 0
+
+LOOP
+	top_index++
+	
+	if top_index >= array_length:
+		then we're at the top, goto DONE
+	elseif list[top_index - 1] <= list[top_index]:
+		then it's in order, goto LOOP
+	else, continue
+	
+	current_idx = top_index
+	LOOP2	
+		swap list[current_idx - 1] and list[current_idx]
+		
+		current_idx--
+		
+		if current_idx == 0:
+			then we're at the bottom, goto LOOP
+		elseif list[current_idx - 1] <= list[current_idx]:
+			then it's in order, goto LOOP
+		else, goto LOOP2
+	
+
+DONE
+	yay!

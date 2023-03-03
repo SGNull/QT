@@ -4,9 +4,11 @@ Handles HLT and power on/off functionality.
 
 Also handles the I/O Writing input pin.
 Here is the I/O read protocol in a state machine form:
-(MyState) => [Actions] => (MyNewState)
-(Input = Writing Flag) => [Read Input; Writing Flag == 0] => (Input = Writing Flag)
-(Input = Writing Flag) => [Read Input; Writing Flag == 1] => (Input = I/O Input)
-(Input = I/O Input) => [Read Input] => (Input = Writing Flag)
+
+	(MyState) => [Actions; Conditions] => (MyNewState)
+
+	(CPU Input = Writing Flag) => [Read Input; Writing Flag == 0] => (CPU Input = Writing Flag)
+	(CPU Input = Writing Flag) => [Read Input; Writing Flag == 1] => (CPU Input = I/O Input)
+	(CPU Input = I/O Input) => [Read Input] => (CPU Input = Writing Flag)
 
 In words: If the I/O is not writing, you will only read 0. If the I/O is writing, you will read a 1, and the next thing you read will be the I/O's input

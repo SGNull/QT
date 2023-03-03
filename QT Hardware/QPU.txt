@@ -12,6 +12,8 @@ I/O Reading is directly read at the time of checking, and not stored.
 
 1 cycle Fetch, then 1 cycle Execute.
 Each Fetch cycle the PC is incremented.
+
+Instruction bit format (high to low):
 [1-bit Halt] [3-bit Output] [1-bit Set ALU Flags] [3-bit Input]
 
 

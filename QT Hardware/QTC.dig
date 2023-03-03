@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <circuit>
-  <version>1</version>
+  <version>2</version>
   <attributes>
     <entry>
       <string>Description</string>
@@ -232,10 +232,10 @@ Note: The computer contains program memory!</string>
       <elementAttributes>
         <entry>
           <string>Description</string>
-          <string>PC start/stop logic</string>
+          <string>Computer start/stop logic</string>
         </entry>
       </elementAttributes>
-      <pos x="380" y="-200"/>
+      <pos x="320" y="-200"/>
     </visualElement>
     <visualElement>
       <elementName>Out</elementName>

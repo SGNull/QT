@@ -7,7 +7,7 @@ MEM > PC
 $Loop
 
 :MyEmptyArray:
-0*12		   # Arrays cannot use constants
+0*12		   # Empty space indicators cannot use constants, but can use any encoding.
 
 :MyList:
 0x23
@@ -29,6 +29,6 @@ $Loop
 	mem > PC
 	$Loop
 
+# Stop the computer
 :Done:
-
 hlt

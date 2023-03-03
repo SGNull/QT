@@ -1,0 +1,49 @@
+See the Example.qta file for a more hands-on approach to QT Assembly.
+
+Mnemonics are not case sensitive.
+Newline seperates everything.
+Comments can be inline, though.
+
+All instructions are formatted like: INPUT > OUTPUT
+
+Appending '+cmp' to any instruction sets flags according to INPUT
+Two flags: zero and negative
+
+
+Inputs and Outputs:
+	a				- A register
+	b				- B register
+	[a]				- the memory address A is pointing to
+	pc				- program counter
+	in / io / out	- I/O ('in' is exclusively input, and 'out' is exclusively output)
+
+
+Special Inputs:
+	a+b					- A+B
+	a-b					- A-B
+	ram / mem / next	- Immediate value
+
+
+Special Outputs:	
+	pcif0 / pcifz	- write to PC if the zero flag is set
+	pcif- / pcifn	- write to PC if the negative flag is set
+	pcifr			- write to PC if the I/O device is reading
+
+
+Assembly Features:
+	Comments:		# My comment
+
+	Characters: 	'c'
+	Hexadecimal:	0x1F
+	Decimal:		122
+	Binary:			0b011010
+
+	Labels: 		:MyLabel:
+	References: 	$ANYLabel
+	Constants:		MY_CONST = 0x5
+	Empty Space:	0*23 (Note: constants cannot be used for length, but any encoding can)
+
+
+Further Details:
+	The assembler is like a fancy memory editor. When I type 0b011011 into a QTA file and assemble it, 0b011011 is placed right where I typed it into program memory. The only time this does not happen is with constants, where the value after the '=' sign is not written to memory, but stored in the label table.
+	Speaking of which, the assembler has an internal label table it uses to keep track of the values of memory labels and constant labels. Constants are just memory labels like in other assembly languages, but with a programmer-defined value.

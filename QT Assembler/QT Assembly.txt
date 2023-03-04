@@ -47,3 +47,12 @@ Assembly Features:
 Further Details:
 	The assembler is like a fancy memory editor. When I type 0b011011 into a QTA file and assemble it, 0b011011 is placed right where I typed it into program memory. The only time this does not happen is with constants, where the value after the '=' sign is not written to memory, but stored in the label table.
 	Speaking of which, the assembler has an internal label table it uses to keep track of the values of memory labels and constant labels. Constants are just memory labels like in other assembly languages, but with a programmer-defined value.
+	
+
+QTX Assembly Special Features:
+	swp:				Swaps the values in A and B.
+	cmp a-b/a+b/b-a:	Does the given operation, but does not write it.
+	a++/a--/b++/b--:	Increments/Decrements the given register.
+	za/zb:				Zeros out the given register
+	zf:					Sets both flags to zero
+	-a/-b				Negates the given register

@@ -23,13 +23,13 @@ HEX_FILE_HEADER = "v2.0 raw\n"
 # Assembly dictionaries
 inputs_dict = {
     "a": 0,
-    "b": 4,
-    "[a]": 1,
-    "a+b": 2,
-    "a-b": 3,
-    "pc": 5,
-    "in": 6,
-    "io": 6,
+    "b": 1,
+    "in": 2,
+    "io": 2,
+    "[a]": 3,
+    "pc": 4,
+    "a+b": 5,
+    "a-b": 6,
     "ram": 7,
     "mem": 7,
     "next": 7,
@@ -48,7 +48,23 @@ outputs_dict = {
     "pcifr": 7
 }
 special_lines_dict = {
-    "hlt": 0x80
+    "hlt": 0x80,
+    "swp": 0b11001100,
+
+    "za":  0b11000000,
+    "-a":  0b11000001,
+    "a++": 0b11000010,
+    "a--": 0b11000011,
+
+    "zb":  0b11000100,
+    "-b":  0b11000101,
+    "b++": 0b11000110,
+    "b--": 0b11000111,
+
+    "zf":      0b11001000,
+    "cmp a-b": 0b11001001,
+    "cmp a+b": 0b11001010,
+    "cmp b-a": 0b11001011
 }
 
 # Assembly Patterns
@@ -265,6 +281,8 @@ def get_line_type(line):
 
     if len(line) == 0:
         return LineType.EMPTY
+    elif line in special_lines_dict:
+        return LineType.SPECIAL
     elif OP_CHAR in line:
         return LineType.OP
     elif get_value_if_value(line):
@@ -273,8 +291,6 @@ def get_line_type(line):
         return LineType.REF
     elif line[0] == line[-1] == LABEL_CHAR:
         return LineType.LABEL
-    elif line in special_lines_dict:
-        return LineType.SPECIAL
     elif CONST_CHAR in line:
         return LineType.CONST
     elif line.startswith(EMPTY_SPACE_PREFIX):

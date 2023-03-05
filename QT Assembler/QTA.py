@@ -78,10 +78,13 @@ REFERENCE_CHAR = '$'
 SET_FLAG_SUFFIX = "+cmp"
 CONST_CHAR = '='
 EMPTY_SPACE_PREFIX = "0*"
+NEGATIVE_SIGN = '-'
 
 INPUT_OP_SHIFT = 4
 SET_FLAGS_MASK = 0b1000
 HEX_PREFIX_SIZE = 2
+NaN = 0x100
+BITS_PER_WORD = 8
 
 # Strings to print while running
 CLEANING_QUIPS = ["Cleaning the input...", "Reticulating splines...", "Input being sanitized...",
@@ -151,7 +154,7 @@ def main():
         print(choice(DONE_END_QUIPS))
 
 
-def build_table(input_lines):
+def build_table(input_lines: list[str]) -> dict:
     """Returns the label table for the given lines."""
 
     # Create the table and set the current address to 0
@@ -176,7 +179,7 @@ def build_table(input_lines):
                     error("Bad constant definition in line: " + line)
 
                 label = parts[0].strip()
-                value = get_value_if_value(parts[1].strip())
+                value = get_value(parts[1].strip())
                 if value:
                     table[label] = value
                 else:
@@ -185,7 +188,7 @@ def build_table(input_lines):
             case LineType.SPACE:
                 # If it's an empty space indicator, add its size to the address
                 val = line[2:]
-                value = get_value_if_value(val)
+                value = get_value(val)
                 if not value:
                     error("Bad value for array in line: " + line)
                 address += value
@@ -202,7 +205,7 @@ def build_table(input_lines):
     return table
 
 
-def assemble(input_lines, table):
+def assemble(input_lines: list[str], table: dict) -> list:
     """Returns the machine code for the given input lines, using the given label table."""
 
     # Create the output list
@@ -216,8 +219,8 @@ def assemble(input_lines, table):
         match line_type:
             case LineType.VAL:
                 # If it's a value line, get and append its value
-                value = get_value_if_value(line)
-                if not value:
+                value = get_value(line)
+                if value is NaN:
                     error("Not a valid value: " + line)
                 output.append(value)
 
@@ -228,7 +231,7 @@ def assemble(input_lines, table):
 
             case LineType.SPECIAL:
                 # If it's special, append what the line translates to
-                output.append(special_lines_dict[line.tolower()])
+                output.append(special_lines_dict[line.lower()])
 
             case LineType.REF:
                 # If it's a reference, get and append the label's value from the table
@@ -240,7 +243,7 @@ def assemble(input_lines, table):
             case LineType.SPACE:
                 # If it's empty space, make space by adding 0's to the output
                 val = line[2:]
-                value = get_value_if_value(val)
+                value = get_value(val)
                 if not value:
                     error("Bad value for array in line: " + line)
                 zeros = [0 for _ in range(0, value)]
@@ -253,17 +256,17 @@ def assemble(input_lines, table):
     return output
 
 
-def hex_file_format(input_data):
+def hex_file_format(input_data: list[int]) -> list[str]:
     """Returns the .hex drive formatted version of the given data."""
     return [HEX_FILE_HEADER] + \
-           [(hex(line)[HEX_PREFIX_SIZE:] + '\n')
+           [(hex(2 ** BITS_PER_WORD + line)[-2:] + '\n')
             for line in input_data]
 
 
-def clean_lines(input_lines):
+def clean_lines(input_lines: list[str]) -> list[str]:
     """Returns a cleaner set of lines to work with."""
 
-    def line_cleaner(input_line):
+    def line_cleaner(input_line: str) -> str | bool:
         """Returns a clean version of the input line, or returns false if cleaned line is empty."""
         out_line = input_line.split(COMMENT_CHAR)[0].strip()
         if len(out_line) == 0:
@@ -276,16 +279,16 @@ def clean_lines(input_lines):
                map(line_cleaner, input_lines)))
 
 
-def get_line_type(line):
+def get_line_type(line: str) -> LineType:
     """Returns the type of the line"""
 
     if len(line) == 0:
         return LineType.EMPTY
-    elif line in special_lines_dict:
+    elif line.lower() in special_lines_dict:
         return LineType.SPECIAL
     elif OP_CHAR in line:
         return LineType.OP
-    elif get_value_if_value(line):
+    elif get_value(line) is not NaN:
         return LineType.VAL
     elif line[0] == REFERENCE_CHAR:
         return LineType.REF
@@ -300,23 +303,30 @@ def get_line_type(line):
         return LineType.UNKNOWN
 
 
-def get_value_if_value(value_lexeme):
-    """Returns False if not a value lexeme, else returns its value"""
+def get_value(value_lexeme: str) -> int:
+    """Returns NaN if not a value lexeme, else returns its value"""
+    is_negative = value_lexeme.startswith(NEGATIVE_SIGN)
+    if is_negative:
+        value_lexeme = value_lexeme[1:]
 
     if value_lexeme[0] == value_lexeme[-1] == CHARACTER_CHAR and len(value_lexeme) == 3:
-        return ord(value_lexeme[1])
+        out = ord(value_lexeme[1])
     elif value_lexeme.startswith(HEX_PREFIX):
-        return int(value_lexeme, 16)
+        out = int(value_lexeme, 16)
     elif value_lexeme.startswith(BINARY_PREFIX):
-        return int(value_lexeme, 2)
+        out = int(value_lexeme, 2)
     elif value_lexeme.isnumeric():
-        return int(value_lexeme)
+        out = int(value_lexeme)
 
     else:
-        return False
+        return NaN
+
+    if is_negative:
+        return -out
+    return out
 
 
-def translate_instruction(instruction_line):
+def translate_instruction(instruction_line: str) -> int:
     """Returns the machine code for the given instruction line."""
 
     # Get the parameters for the operation
@@ -346,7 +356,7 @@ def translate_instruction(instruction_line):
     return machine_code
 
 
-def error(msg):
+def error(msg: str) -> None:
     """Prints the message and stops the program."""
     print(msg)
     exit(0)

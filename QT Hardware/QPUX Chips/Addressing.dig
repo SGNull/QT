@@ -98,6 +98,10 @@
       <elementName>Comparator</elementName>
       <elementAttributes>
         <entry>
+          <string>Signed</string>
+          <boolean>true</boolean>
+        </entry>
+        <entry>
           <string>Label</string>
           <string>Out CMP</string>
         </entry>

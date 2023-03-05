@@ -25,11 +25,6 @@ Note: The computer contains program memory!</string>
   </attributes>
   <visualElements>
     <visualElement>
-      <elementName>QPU.dig</elementName>
-      <elementAttributes/>
-      <pos x="420" y="140"/>
-    </visualElement>
-    <visualElement>
       <elementName>RAMDualPort</elementName>
       <elementAttributes>
         <entry>
@@ -55,11 +50,15 @@ Note: The computer contains program memory!</string>
       <elementName>Out</elementName>
       <elementAttributes>
         <entry>
+          <string>Description</string>
+          <string>High if the computer is running.</string>
+        </entry>
+        <entry>
           <string>Label</string>
-          <string>WP</string>
+          <string>Running</string>
         </entry>
       </elementAttributes>
-      <pos x="880" y="360"/>
+      <pos x="820" y="-120"/>
     </visualElement>
     <visualElement>
       <elementName>In</elementName>
@@ -78,6 +77,10 @@ Note: The computer contains program memory!</string>
     <visualElement>
       <elementName>In</elementName>
       <elementAttributes>
+        <entry>
+          <string>Description</string>
+          <string>The computer &amp; CPU clock.</string>
+        </entry>
         <entry>
           <string>Label</string>
           <string>Clk</string>
@@ -112,6 +115,10 @@ Note: The computer contains program memory!</string>
     <visualElement>
       <elementName>Out</elementName>
       <elementAttributes>
+        <entry>
+          <string>Description</string>
+          <string>The data output portion of the I/O.</string>
+        </entry>
         <entry>
           <string>Label</string>
           <string>Out</string>
@@ -242,14 +249,14 @@ Note: The computer contains program memory!</string>
       <elementAttributes>
         <entry>
           <string>Description</string>
-          <string>High if the computer is running.</string>
+          <string>On if the computer is writing to the I/O port.</string>
         </entry>
         <entry>
           <string>Label</string>
-          <string>Running</string>
+          <string>WP</string>
         </entry>
       </elementAttributes>
-      <pos x="820" y="-120"/>
+      <pos x="880" y="360"/>
     </visualElement>
     <visualElement>
       <elementName>And</elementName>
@@ -276,6 +283,10 @@ Note: The computer contains program memory!</string>
     <visualElement>
       <elementName>In</elementName>
       <elementAttributes>
+        <entry>
+          <string>Description</string>
+          <string>The data input portion of the I/O.</string>
+        </entry>
         <entry>
           <string>Label</string>
           <string>In</string>
@@ -348,6 +359,11 @@ Note: The computer contains program memory!</string>
         </entry>
       </elementAttributes>
       <pos x="160" y="100"/>
+    </visualElement>
+    <visualElement>
+      <elementName>QPUX.dig</elementName>
+      <elementAttributes/>
+      <pos x="420" y="140"/>
     </visualElement>
   </visualElements>
   <wires>

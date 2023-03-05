@@ -17,3 +17,11 @@ addValue = 5
 	
 	# Write to output
 	a > out
+	
+	# Halt
+	hlt
+	
+	# If turned back on, repeat.
+	mem > PC
+	$Main
+	

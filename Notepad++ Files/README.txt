@@ -1,7 +1,7 @@
 To import the QTA Notepad++ User Defined Langauge:
 ==================================================
 	On the top bar (with "File" Edit" etc.), click "Language" -> "User Defined Language" -> "Define your language..."
-	Then click "Import..." then find and select the "QT Assembly.xml" file.
+	Then click "Import..." then find and select the "QTX Assembly.xml" file.
 
 
 

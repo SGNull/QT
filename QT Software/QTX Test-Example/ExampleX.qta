@@ -1,0 +1,33 @@
+# Example program to test and demo the new instructions.
+# Ends with A=3 and B=2
+
+AAAA = 0xde
+BBBB = 0xad
+
+:Main:
+	a++		# a = 0 and b = 0
+	b++
+	za
+	zb
+	
+	cmp a+b			# a+b should be zero
+	mem > PCifZ
+	$Correct
+	
+	hlt		# Shouldn't get here.
+	$AAAA
+	$BBBB
+
+:Correct:
+	a--		# a = 2
+	a--
+	a--
+	a++
+	-a
+	
+	b++		# b = 3
+	b++
+	b++
+	
+	swp		# a = 3 and b = 2
+	hlt

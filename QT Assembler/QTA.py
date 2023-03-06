@@ -180,17 +180,16 @@ def build_table(input_lines: list[str]) -> dict:
 
                 label = parts[0].strip()
                 value = get_value(parts[1].strip())
-                if value:
-                    table[label] = value
-                else:
+                if value is NaN:
                     error("Bad value in line: " + line)
+                table[label] = value
 
             case LineType.SPACE:
                 # If it's an empty space indicator, add its size to the address
                 val = line[2:]
                 value = get_value(val)
-                if not value:
-                    error("Bad value for array in line: " + line)
+                if value is NaN:
+                    error("Bad value for empty space indicator in line: " + line)
                 address += value
 
             case LineType.UNKNOWN:

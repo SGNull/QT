@@ -1,0 +1,47 @@
+# Example Hello World Program
+# Comments are just like python here.
+
+next > PC
+$Start
+
+# "Strings" have to be created line by line using characters and labels
+:MyString:
+'H'
+'e'
+'l'
+'l'
+'o'
+' '
+'w'
+'o'
+'r'
+'l'
+'d'
+'!'
+0	# Using 0 to mark the end of the string.
+
+
+:Start:
+	# CurrentAddr = MyString
+	mem > A
+	$MyString
+	
+	# While [CurrentAddr] != 0:
+	:Loop:	
+		[A] > B +cmp
+		mem > PCifZ
+		$Done
+		
+		# [CurrentAddr] > Output
+		B > OUT
+		
+		# CurrentAddr = CurrentAddr + 1
+		A++
+		
+		mem > PC
+		$Loop
+	:Done:
+	
+	# exit()
+	hlt
+	

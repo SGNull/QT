@@ -21,7 +21,7 @@ FILE_OUTPUT_EXTENSION = ".hex"
 HEX_FILE_HEADER = "v2.0 raw\n"
 
 # Assembly dictionaries
-inputs_dict = {
+reads_dict = {
     "a": 0,
     "b": 1,
     "in": 2,
@@ -34,7 +34,7 @@ inputs_dict = {
     "mem": 7,
     "next": 7,
 }
-outputs_dict = {
+writes_dict = {
     "a": 0,
     "b": 1,
     "out": 2,
@@ -112,7 +112,7 @@ class LineType(Enum):
     EMPTY = -2
 
 
-def main():
+def main() -> None:
     """The main function of the program."""
 
     # Get args
@@ -263,23 +263,22 @@ def hex_file_format(input_data: list[int]) -> list[str]:
 
 
 def clean_lines(input_lines: list[str]) -> list[str]:
-    """Returns a cleaner set of lines to work with."""
+    """Removes all unimportant information from the given list of lines (comments, whitespace, etc.)."""
 
-    def line_cleaner(input_line: str) -> str | bool:
-        """Returns a clean version of the input line, or returns false if cleaned line is empty."""
-        out_line = input_line.split(COMMENT_CHAR)[0].strip()
-        if len(out_line) == 0:
-            return False
-        else:
-            return out_line
-
-    return list(  # Magic (◉ᗜ◉)⊃━☆ﾟ.*･｡ﾟ
+    # First, we make a function that defines what we mean by "clean lines."
+    def line_cleaner(input_line: str) -> str:
+        """Returns a clean version of the input line."""
+        return input_line.split(COMMENT_CHAR)[0].strip()
+    # Then, use map to get an iterator where each line has been ran through line_cleaner()
+    # After that, filter returns an iterator containing only the lines where bool(line) == True (len(line) != 0)
+    # Finally, we construct a list out of these non-empty, cleaned lines, and return that.
+    return list(
         filter(bool,
                map(line_cleaner, input_lines)))
 
 
 def get_line_type(line: str) -> LineType:
-    """Returns the type of the line"""
+    """Returns the type of the given line."""
 
     if len(line) == 0:
         return LineType.EMPTY
@@ -303,7 +302,7 @@ def get_line_type(line: str) -> LineType:
 
 
 def get_value(value_lexeme: str) -> int:
-    """Returns NaN if not a value lexeme, else returns its value"""
+    """Returns NaN if not a value lexeme, else returns its value."""
     is_negative = value_lexeme.startswith(NEGATIVE_SIGN)
     if is_negative:
         value_lexeme = value_lexeme[1:]
@@ -341,12 +340,12 @@ def translate_instruction(instruction_line: str) -> int:
     out_part = raw_params[1].strip().lower()
 
     # Make sure they actually exist before getting their values
-    if in_part not in inputs_dict:
+    if in_part not in reads_dict:
         error("Bad input operand: " + instruction_line)
-    if out_part not in outputs_dict:
+    if out_part not in writes_dict:
         error("Bad output operand: " + instruction_line)
-    input_num = inputs_dict[in_part]
-    output_num = outputs_dict[out_part]
+    input_num = reads_dict[in_part]
+    output_num = writes_dict[out_part]
 
     # Create & return the machine code given the two parameters' values
     machine_code = input_num << INPUT_OP_SHIFT | output_num

@@ -2,8 +2,8 @@ A Technically-Not-One-Instruction-But-It-Kinda-Is-So-Yeah Super RISC Processor
 
 
                 0    1     2     3    4       5        6           7
-Input Select:   A,   B,   I/O,  [A],  PC,    A+B,     A-B,     RAM (& do PC++).
-Output Select:  A,   B,   I/O,  [A],  PC,  PC if 0,  PC if -,  PC if I/O Read.
+Read Select:   A,   B,   I/O,  [A],  PC,    A+B,     A-B,     RAM (& do PC++).
+Write Select:  A,   B,   I/O,  [A],  PC,  PC if 0,  PC if -,  PC if I/O Read.
 
 
 2 flags can be stored: out == 0, and out < 0
@@ -14,7 +14,7 @@ I/O Reading is directly read at the time of checking, and not stored.
 Each Fetch cycle the PC is incremented.
 
 Instruction bit format (high to low):
-[1-bit Halt] [3-bit Output] [1-bit Set ALU Flags] [3-bit Input]
+[1-bit Halt] [3-bit Read] [1-bit Set ALU Flags] [3-bit Write]
 
 
 Enable must be kept on for CPU to run.

@@ -14,23 +14,29 @@
     </entry>
     <entry>
       <string>preloadProgramFile</string>
-      <file>C:\Users\Devin\Desktop\QT\QT Software\Insertion Sort\InsertionSort.hex</file>
+      <file>C:\Users\Devin\Desktop\QT\QT Software\Hello World\Hello World.hex</file>
     </entry>
   </attributes>
   <visualElements>
     <visualElement>
-      <elementName>Button</elementName>
+      <elementName>LED</elementName>
       <elementAttributes>
         <entry>
-          <string>addValueToGraph</string>
-          <boolean>false</boolean>
-        </entry>
-        <entry>
-          <string>Label</string>
-          <string>Turn On</string>
+          <string>rotation</string>
+          <rotation rotation="1"/>
         </entry>
       </elementAttributes>
-      <pos x="360" y="380"/>
+      <pos x="1000" y="340"/>
+    </visualElement>
+    <visualElement>
+      <elementName>QTC.dig</elementName>
+      <elementAttributes/>
+      <pos x="800" y="380"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Terminal</elementName>
+      <elementAttributes/>
+      <pos x="1120" y="400"/>
     </visualElement>
     <visualElement>
       <elementName>Clock</elementName>
@@ -44,245 +50,119 @@
           <int>32</int>
         </entry>
       </elementAttributes>
-      <pos x="360" y="320"/>
+      <pos x="740" y="400"/>
     </visualElement>
     <visualElement>
-      <elementName>LED</elementName>
+      <elementName>Const</elementName>
       <elementAttributes>
         <entry>
-          <string>rotation</string>
-          <rotation rotation="1"/>
-        </entry>
-      </elementAttributes>
-      <pos x="1000" y="340"/>
-    </visualElement>
-    <visualElement>
-      <elementName>Probe</elementName>
-      <elementAttributes>
-        <entry>
-          <string>Label</string>
-          <string>Output</string>
-        </entry>
-        <entry>
-          <string>intFormat</string>
-          <intFormat>dec</intFormat>
-        </entry>
-      </elementAttributes>
-      <pos x="740" y="320"/>
-    </visualElement>
-    <visualElement>
-      <elementName>In</elementName>
-      <elementAttributes>
-        <entry>
-          <string>addValueToGraph</string>
-          <boolean>false</boolean>
-        </entry>
-        <entry>
-          <string>Label</string>
-          <string>Input</string>
+          <string>Value</string>
+          <long>0</long>
         </entry>
         <entry>
           <string>Bits</string>
           <int>8</int>
         </entry>
+      </elementAttributes>
+      <pos x="760" y="440"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Const</elementName>
+      <elementAttributes>
         <entry>
-          <string>intFormat</string>
-          <intFormat>dec</intFormat>
+          <string>Value</string>
+          <long>0</long>
         </entry>
       </elementAttributes>
-      <pos x="360" y="500"/>
+      <pos x="760" y="420"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Const</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Value</string>
+          <long>0</long>
+        </entry>
+      </elementAttributes>
+      <pos x="760" y="460"/>
     </visualElement>
     <visualElement>
       <elementName>Button</elementName>
       <elementAttributes>
         <entry>
-          <string>addValueToGraph</string>
-          <boolean>false</boolean>
-        </entry>
-        <entry>
           <string>Label</string>
-          <string>Send</string>
+          <string>Power</string>
         </entry>
       </elementAttributes>
-      <pos x="360" y="420"/>
+      <pos x="660" y="380"/>
     </visualElement>
     <visualElement>
-      <elementName>QTC.dig</elementName>
-      <elementAttributes/>
-      <pos x="800" y="380"/>
-    </visualElement>
-    <visualElement>
-      <elementName>Interface Q1.dig</elementName>
-      <elementAttributes/>
-      <pos x="520" y="400"/>
-    </visualElement>
-    <visualElement>
-      <elementName>Button</elementName>
+      <elementName>Text</elementName>
       <elementAttributes>
         <entry>
-          <string>addValueToGraph</string>
-          <boolean>false</boolean>
-        </entry>
-        <entry>
-          <string>Label</string>
-          <string>Read</string>
+          <string>Description</string>
+          <string>Set up for: Hello World</string>
         </entry>
       </elementAttributes>
-      <pos x="360" y="460"/>
+      <pos x="660" y="280"/>
     </visualElement>
   </visualElements>
   <wires>
     <wire>
-      <p1 x="460" y="480"/>
-      <p2 x="520" y="480"/>
-    </wire>
-    <wire>
-      <p1 x="360" y="320"/>
-      <p2 x="500" y="320"/>
-    </wire>
-    <wire>
-      <p1 x="720" y="320"/>
-      <p2 x="740" y="320"/>
-    </wire>
-    <wire>
-      <p1 x="700" y="420"/>
-      <p2 x="800" y="420"/>
-    </wire>
-    <wire>
-      <p1 x="980" y="420"/>
-      <p2 x="1020" y="420"/>
-    </wire>
-    <wire>
-      <p1 x="360" y="420"/>
-      <p2 x="520" y="420"/>
-    </wire>
-    <wire>
-      <p1 x="480" y="580"/>
-      <p2 x="1020" y="580"/>
-    </wire>
-    <wire>
-      <p1 x="500" y="520"/>
-      <p2 x="520" y="520"/>
-    </wire>
-    <wire>
-      <p1 x="500" y="360"/>
-      <p2 x="780" y="360"/>
-    </wire>
-    <wire>
-      <p1 x="700" y="460"/>
-      <p2 x="800" y="460"/>
-    </wire>
-    <wire>
-      <p1 x="420" y="460"/>
-      <p2 x="520" y="460"/>
-    </wire>
-    <wire>
-      <p1 x="360" y="460"/>
-      <p2 x="380" y="460"/>
-    </wire>
-    <wire>
-      <p1 x="700" y="400"/>
-      <p2 x="720" y="400"/>
-    </wire>
-    <wire>
       <p1 x="980" y="400"/>
-      <p2 x="1040" y="400"/>
+      <p2 x="1120" y="400"/>
     </wire>
     <wire>
-      <p1 x="500" y="400"/>
-      <p2 x="520" y="400"/>
+      <p1 x="740" y="400"/>
+      <p2 x="780" y="400"/>
     </wire>
     <wire>
       <p1 x="780" y="400"/>
       <p2 x="800" y="400"/>
     </wire>
     <wire>
-      <p1 x="500" y="560"/>
-      <p2 x="1000" y="560"/>
+      <p1 x="1000" y="420"/>
+      <p2 x="1120" y="420"/>
     </wire>
     <wire>
-      <p1 x="480" y="500"/>
-      <p2 x="520" y="500"/>
+      <p1 x="760" y="420"/>
+      <p2 x="800" y="420"/>
     </wire>
     <wire>
-      <p1 x="360" y="500"/>
-      <p2 x="420" y="500"/>
-    </wire>
-    <wire>
-      <p1 x="700" y="440"/>
-      <p2 x="800" y="440"/>
+      <p1 x="780" y="500"/>
+      <p2 x="1000" y="500"/>
     </wire>
     <wire>
       <p1 x="980" y="440"/>
-      <p2 x="1000" y="440"/>
+      <p2 x="1120" y="440"/>
     </wire>
     <wire>
-      <p1 x="380" y="440"/>
-      <p2 x="520" y="440"/>
-    </wire>
-    <wire>
-      <p1 x="460" y="600"/>
-      <p2 x="1040" y="600"/>
-    </wire>
-    <wire>
-      <p1 x="360" y="380"/>
-      <p2 x="800" y="380"/>
+      <p1 x="760" y="440"/>
+      <p2 x="800" y="440"/>
     </wire>
     <wire>
       <p1 x="980" y="380"/>
       <p2 x="1000" y="380"/>
     </wire>
     <wire>
-      <p1 x="720" y="320"/>
-      <p2 x="720" y="400"/>
+      <p1 x="660" y="380"/>
+      <p2 x="800" y="380"/>
     </wire>
     <wire>
-      <p1 x="480" y="500"/>
-      <p2 x="480" y="580"/>
+      <p1 x="760" y="460"/>
+      <p2 x="800" y="460"/>
     </wire>
     <wire>
-      <p1 x="1040" y="400"/>
-      <p2 x="1040" y="600"/>
-    </wire>
-    <wire>
-      <p1 x="500" y="520"/>
-      <p2 x="500" y="560"/>
-    </wire>
-    <wire>
-      <p1 x="500" y="320"/>
-      <p2 x="500" y="360"/>
-    </wire>
-    <wire>
-      <p1 x="500" y="360"/>
-      <p2 x="500" y="400"/>
-    </wire>
-    <wire>
-      <p1 x="420" y="460"/>
-      <p2 x="420" y="500"/>
+      <p1 x="1000" y="420"/>
+      <p2 x="1000" y="500"/>
     </wire>
     <wire>
       <p1 x="1000" y="340"/>
       <p2 x="1000" y="380"/>
     </wire>
     <wire>
-      <p1 x="1000" y="440"/>
-      <p2 x="1000" y="560"/>
-    </wire>
-    <wire>
-      <p1 x="1020" y="420"/>
-      <p2 x="1020" y="580"/>
-    </wire>
-    <wire>
-      <p1 x="460" y="480"/>
-      <p2 x="460" y="600"/>
-    </wire>
-    <wire>
-      <p1 x="380" y="440"/>
-      <p2 x="380" y="460"/>
-    </wire>
-    <wire>
-      <p1 x="780" y="360"/>
-      <p2 x="780" y="400"/>
+      <p1 x="780" y="400"/>
+      <p2 x="780" y="500"/>
     </wire>
   </wires>
   <measurementOrdering/>
